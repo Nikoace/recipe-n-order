@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test"
-import { calculateShoppingList } from "@/db/queries/orders"
+import { calculateShoppingList, type ShoppingItem } from "@/db/queries/orders"
 
 test("calculateShoppingList aggregates ingredients correctly", () => {
   const recipes = [
@@ -25,7 +25,7 @@ test("calculateShoppingList aggregates ingredients correctly", () => {
     { items: [{ recipeId: 2, quantity: 1 }] },
   ]
 
-  const result = calculateShoppingList(recipes as any, orders as any)
+  const result: ShoppingItem[] = calculateShoppingList(recipes as any, orders as any)
 
   // 红烧肉点了2份，每份500g五花肉，总计1000g
   const pork = result.find((r) => r.name === "五花肉")

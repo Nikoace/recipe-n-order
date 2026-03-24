@@ -1,6 +1,6 @@
 import { db } from "@/db"
-import { orders, guests } from "@/db/schema"
-import { eq, and } from "drizzle-orm"
+import { orders } from "@/db/schema"
+import { eq } from "drizzle-orm"
 import type { Recipe, Order } from "@/db/schema"
 
 export async function getOrdersByEvent(eventId: number) {
