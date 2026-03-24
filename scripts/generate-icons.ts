@@ -35,7 +35,7 @@ function createOrangePNG(size: number): Buffer {
   }
 
   // Use zlib to compress
-  const compressed = Bun.deflateSync(rawData)
+  const compressed = Buffer.from(Bun.deflateSync(rawData))
   const idat = makeChunk("IDAT", compressed)
 
   // IEND chunk
