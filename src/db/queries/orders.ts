@@ -68,14 +68,15 @@ export function calculateShoppingList(
 
       const total = amount * qty
       const round2 = (n: number) => Math.round(n * 100) / 100
-      const existing = ingredientMap.get(ing.name)
-      if (existing && existing.unit === ing.unit) {
+      const key = `${ing.name}::${ing.unit}`
+      const existing = ingredientMap.get(key)
+      if (existing) {
         existing.totalAmount = round2(parseFloat(existing.totalAmount) + total).toString()
         if (!existing.recipes.includes(recipe.title ?? "")) {
           existing.recipes.push(recipe.title ?? "")
         }
       } else {
-        ingredientMap.set(ing.name, {
+        ingredientMap.set(key, {
           name: ing.name,
           totalAmount: round2(total).toString(),
           unit: ing.unit,

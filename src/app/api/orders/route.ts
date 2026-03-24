@@ -8,6 +8,13 @@ export async function POST(req: NextRequest) {
   if (!shareCode || !Array.isArray(items)) {
     return NextResponse.json({ error: "shareCode 和 items 不能为空" }, { status: 400 })
   }
+  if (!items.every((i: unknown) =>
+    typeof i === "object" && i !== null &&
+    Number.isInteger((i as { recipeId: number }).recipeId) && (i as { recipeId: number }).recipeId > 0 &&
+    Number.isInteger((i as { quantity: number }).quantity) && (i as { quantity: number }).quantity > 0
+  )) {
+    return NextResponse.json({ error: "items 格式不合法" }, { status: 400 })
+  }
 
   const event = await getEventByShareCode(shareCode)
   if (!event) return NextResponse.json({ error: "活动不存在" }, { status: 404 })
