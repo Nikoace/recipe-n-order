@@ -15,21 +15,26 @@ export default function LoginPage() {
     e.preventDefault()
     setError("")
     setLoading(true)
-    const form = new FormData(e.currentTarget)
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        username: form.get("username"),
-        password: form.get("password"),
-      }),
-    })
-    setLoading(false)
-    if (res.ok) {
-      router.push("/admin/recipes")
-    } else {
-      const data = await res.json()
-      setError(data.error)
+    try {
+      const form = new FormData(e.currentTarget)
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: form.get("username"),
+          password: form.get("password"),
+        }),
+      })
+      if (res.ok) {
+        router.push("/admin/recipes")
+      } else {
+        const data = await res.json()
+        setError(data.error)
+      }
+    } catch {
+      setError("网络错误，请稍后重试")
+    } finally {
+      setLoading(false)
     }
   }
 
