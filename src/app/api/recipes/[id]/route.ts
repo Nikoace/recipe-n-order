@@ -19,6 +19,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   const { id } = await params
   const { tagIds, ...data } = await req.json()
   const recipe = await updateRecipe(Number(id), data)
+  if (!recipe) return NextResponse.json({ error: "未找到" }, { status: 404 })
   if (tagIds !== undefined) {
     await setRecipeTags(Number(id), tagIds)
   }
