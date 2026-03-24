@@ -117,6 +117,13 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* 暖色主题覆盖 - orange-500 (#f97316) */
+:root {
+  --primary: oklch(0.705 0.213 47.604);
+  --primary-foreground: oklch(1 0 0);
+  --ring: oklch(0.705 0.213 47.604);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
