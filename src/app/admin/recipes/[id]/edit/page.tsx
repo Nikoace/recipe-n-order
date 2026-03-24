@@ -11,10 +11,12 @@ export default async function EditRecipePage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
+  const numId = Number(id)
+  if (isNaN(numId)) notFound()
   const [recipe, allTags, rt] = await Promise.all([
-    getRecipeById(Number(id)),
+    getRecipeById(numId),
     db.select().from(tags),
-    db.select().from(recipeTags).where(eq(recipeTags.recipeId, Number(id))),
+    db.select().from(recipeTags).where(eq(recipeTags.recipeId, numId)),
   ])
 
   if (!recipe) notFound()

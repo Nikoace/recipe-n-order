@@ -50,7 +50,7 @@ export function StepEditor({ value, onChange, onImageUpload }: Props) {
       {value.map((step, i) => (
         <div key={i} className="border rounded-lg p-4 space-y-2">
           <div className="flex items-center justify-between">
-            <span className="font-medium text-sm">步骤 {step.order}</span>
+            <span className="font-medium text-sm">步骤 {i + 1}</span>
             <Button variant="ghost" size="sm" onClick={() => remove(i)}>删除</Button>
           </div>
           <Textarea

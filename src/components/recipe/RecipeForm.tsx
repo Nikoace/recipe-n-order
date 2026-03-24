@@ -26,6 +26,7 @@ interface Props {
 export function RecipeForm({ recipe, tags, selectedTagIds = [], mode }: Props) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
   const [coverPreview, setCoverPreview] = useState(recipe?.coverImage ?? "")
   const [ingredients, setIngredients] = useState(recipe?.ingredients ?? [])
   const [steps, setSteps] = useState(recipe?.steps ?? [])
@@ -36,6 +37,7 @@ export function RecipeForm({ recipe, tags, selectedTagIds = [], mode }: Props) {
     fd.append("file", file)
     fd.append("folder", folder)
     const res = await fetch("/api/upload", { method: "POST", body: fd })
+    if (!res.ok) throw new Error("图片上传失败")
     const { url } = await res.json()
     return url
   }
@@ -43,12 +45,17 @@ export function RecipeForm({ recipe, tags, selectedTagIds = [], mode }: Props) {
   async function handleCoverChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file) return
-    const url = await uploadFile(file, "covers")
-    setCoverPreview(url)
+    try {
+      const url = await uploadFile(file, "covers")
+      setCoverPreview(url)
+    } catch {
+      setError("封面图片上传失败，请重试")
+    }
   }
 
   async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault()
+    setError("")
     setLoading(true)
     try {
       const form = new FormData(e.currentTarget)
@@ -76,7 +83,12 @@ export function RecipeForm({ recipe, tags, selectedTagIds = [], mode }: Props) {
       if (res.ok) {
         router.push("/admin/recipes")
         router.refresh()
+      } else {
+        const data = await res.json().catch(() => ({}))
+        setError(data.error ?? "保存失败，请重试")
       }
+    } catch {
+      setError("网络错误，请重试")
     } finally {
       setLoading(false)
     }
@@ -166,6 +178,7 @@ export function RecipeForm({ recipe, tags, selectedTagIds = [], mode }: Props) {
         />
       </div>
 
+      {error && <p className="text-sm text-red-500">{error}</p>}
       <Button type="submit" disabled={loading}>
         {loading ? "保存中..." : mode === "create" ? "创建菜谱" : "保存修改"}
       </Button>
