@@ -22,6 +22,10 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   const numId = Number(id)
   if (isNaN(numId)) return NextResponse.json({ error: "无效 ID" }, { status: 400 })
   const { status } = await req.json()
+  const validStatuses = ["draft", "active", "closed"] as const
+  if (!validStatuses.includes(status)) {
+    return NextResponse.json({ error: "无效的状态值" }, { status: 400 })
+  }
   const event = await updateEventStatus(numId, status)
   if (!event) return NextResponse.json({ error: "未找到" }, { status: 404 })
   return NextResponse.json(event)

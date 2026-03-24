@@ -14,7 +14,10 @@ export default function NewEventPage() {
   const [error, setError] = useState("")
 
   useEffect(() => {
-    fetch("/api/recipes").then((r) => r.json()).then(setRecipes)
+    fetch("/api/recipes")
+      .then((r) => r.json())
+      .then((data) => { if (Array.isArray(data)) setRecipes(data) })
+      .catch(() => {})
   }, [])
 
   function toggle(id: number) {
