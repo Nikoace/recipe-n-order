@@ -1,6 +1,7 @@
 // scripts/generate-icons.ts
 // 生成简单的橙色占位 PNG 图标（正式版本请替换为真实设计图标）
 import { writeFileSync, mkdirSync } from "fs"
+import { deflateSync } from "zlib"
 
 function createOrangePNG(size: number): Buffer {
   // 最小有效 PNG：单色橙色 (f97316) 正方形
@@ -35,7 +36,7 @@ function createOrangePNG(size: number): Buffer {
   }
 
   // Use zlib to compress
-  const compressed = Buffer.from(Bun.deflateSync(rawData))
+  const compressed = deflateSync(rawData)
   const idat = makeChunk("IDAT", compressed)
 
   // IEND chunk
