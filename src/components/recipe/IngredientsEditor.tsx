@@ -50,7 +50,7 @@ export function IngredientsEditor({ value, onChange }: Props) {
             onChange={(e) => update(i, "unit", e.target.value)}
             className="w-20"
           />
-          <Button variant="ghost" size="sm" onClick={() => remove(i)}>删除</Button>
+          <Button type="button" variant="ghost" size="sm" onClick={() => remove(i)}>删除</Button>
         </div>
       ))}
       <Button variant="outline" size="sm" onClick={add} type="button">

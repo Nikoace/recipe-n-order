@@ -1,15 +1,10 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { getRecipes } from "@/db/queries/recipes"
-import { db } from "@/db"
-import { tags } from "@/db/schema"
 import { difficultyLabel } from "@/lib/utils"
 
 export default async function RecipesPage() {
-  const [allRecipes] = await Promise.all([
-    getRecipes(),
-    db.select().from(tags),
-  ])
+  const allRecipes = await getRecipes()
 
   return (
     <div>
