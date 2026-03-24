@@ -17,6 +17,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "未提供文件" }, { status: 400 })
   }
 
+  const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"]
+  if (!allowedTypes.includes(file.type)) {
+    return NextResponse.json({ error: "仅支持 JPEG、PNG、WebP、GIF 格式" }, { status: 400 })
+  }
+
   const buffer = Buffer.from(await file.arrayBuffer())
   const url = await uploadImage(buffer, file.type, folder)
   return NextResponse.json({ url })

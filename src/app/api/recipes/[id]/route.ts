@@ -33,6 +33,10 @@ export async function DELETE(_: NextRequest, { params }: { params: Promise<{ id:
   }
 
   const { id } = await params
-  await deleteRecipe(Number(id))
+  const numId = Number(id)
+  if (isNaN(numId)) return NextResponse.json({ error: "无效 ID" }, { status: 400 })
+  const existing = await getRecipeById(numId)
+  if (!existing) return NextResponse.json({ error: "未找到" }, { status: 404 })
+  await deleteRecipe(numId)
   return NextResponse.json({ ok: true })
 }

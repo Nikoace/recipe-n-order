@@ -18,6 +18,9 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json()
+  if (!body.title || typeof body.title !== "string") {
+    return NextResponse.json({ error: "标题不能为空" }, { status: 400 })
+  }
   const { tagIds, ...recipeData } = body
   const recipe = await createRecipe(recipeData)
   if (tagIds?.length) {
