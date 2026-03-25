@@ -49,7 +49,7 @@ export default async function RecipeDetailPage({
         <p className="text-gray-600 mt-2">{recipe.description}</p>
       )}
 
-      {recipe.ingredients.length > 0 && (
+      {recipe.ingredients?.length > 0 && (
         <section>
           <h2 className="text-lg font-semibold mt-6 mb-2">食材</h2>
           <ul className="divide-y divide-gray-200 border border-gray-200 rounded-lg overflow-hidden">
@@ -57,7 +57,7 @@ export default async function RecipeDetailPage({
               <li key={index} className="flex justify-between px-4 py-2 bg-white">
                 <span>{ingredient.name}</span>
                 <span className="text-gray-500">
-                  {ingredient.amount}{ingredient.unit}
+                  {ingredient.amount} {ingredient.unit}
                 </span>
               </li>
             ))}
@@ -65,7 +65,7 @@ export default async function RecipeDetailPage({
         </section>
       )}
 
-      {recipe.steps.length > 0 && (
+      {recipe.steps?.length > 0 && (
         <section>
           <h2 className="text-lg font-semibold mt-6 mb-2">步骤</h2>
           <ol className="space-y-4">
