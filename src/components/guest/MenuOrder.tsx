@@ -44,7 +44,6 @@ export default function MenuOrder({
     return q
   })
   const [loading, setLoading] = useState(false)
-  const [submitted, setSubmitted] = useState(false)
   const [order, setOrder] = useState<CurrentOrder | null>(currentOrder)
 
   const total = Object.values(quantities).reduce((sum, v) => sum + (v > 0 ? v : 0), 0)
@@ -74,8 +73,7 @@ export default function MenuOrder({
 
       const updatedOrder = await res.json()
       toast.success("点菜成功！")
-      setSubmitted(true)
-      setOrder(updatedOrder)
+      setOrder({ id: updatedOrder.id, items: updatedOrder.items })
     } catch {
       toast.error("网络错误，请重试")
     } finally {
@@ -146,7 +144,7 @@ export default function MenuOrder({
               onClick={handleSubmit}
               disabled={total === 0 || loading}
             >
-              {loading ? "提交中..." : (order ?? submitted) ? "更新点菜" : "提交点菜"}
+              {loading ? "提交中..." : order ? "更新点菜" : "提交点菜"}
             </Button>
           )}
         </div>
