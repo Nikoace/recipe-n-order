@@ -1,4 +1,5 @@
 import React from "react"
+import { Toaster } from "@/components/ui/sonner"
 
 export default function GuestLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -9,6 +10,7 @@ export default function GuestLayout({ children }: { children: React.ReactNode })
         </div>
       </header>
       <main className="max-w-lg mx-auto px-4 py-6">{children}</main>
+      <Toaster />
     </div>
   )
 }

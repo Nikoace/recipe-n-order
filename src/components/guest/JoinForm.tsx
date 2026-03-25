@@ -68,7 +68,7 @@ export default function JoinForm({ shareCode, eventTitle, eventDate, isClosed }:
           />
         </div>
         {error && <p className="text-sm text-red-500">{error}</p>}
-        <Button type="submit" className="w-full" disabled={loading}>
+        <Button type="submit" className="w-full" disabled={loading || isClosed}>
           {loading ? "加入中..." : "加入活动"}
         </Button>
       </form>

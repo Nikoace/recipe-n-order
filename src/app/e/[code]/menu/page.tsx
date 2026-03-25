@@ -18,6 +18,9 @@ export default async function MenuPage({
   }
 
   const guestId = Number(guestCookie.value)
+  if (isNaN(guestId)) {
+    redirect(`/e/${code}`)
+  }
 
   const event = await getEventByShareCode(code)
   if (!event || event.status === "draft") {

@@ -22,6 +22,7 @@ export default function QuantityStepper({
       <Button
         variant="outline"
         size="sm"
+        type="button"
         onClick={() => onChange(value - 1)}
         disabled={value <= minimum || disabled}
         aria-label="减少数量"
@@ -32,6 +33,7 @@ export default function QuantityStepper({
       <Button
         variant="outline"
         size="sm"
+        type="button"
         onClick={() => onChange(value + 1)}
         disabled={disabled}
         aria-label="增加数量"

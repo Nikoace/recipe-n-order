@@ -10,6 +10,10 @@ export async function POST(req: NextRequest) {
   if (!shareCode || !name) {
     return NextResponse.json({ error: "shareCode 和 name 不能为空" }, { status: 400 })
   }
+  const trimmedName = name.trim()
+  if (!trimmedName) {
+    return NextResponse.json({ error: "昵称不能为空" }, { status: 400 })
+  }
 
   const event = await getEventByShareCode(shareCode)
   if (!event) {
@@ -21,13 +25,13 @@ export async function POST(req: NextRequest) {
 
   // 检查该昵称在该活动中是否已存在
   let guest = await db.query.guests.findFirst({
-    where: and(eq(guests.eventId, event.id), eq(guests.name, name)),
+    where: and(eq(guests.eventId, event.id), eq(guests.name, trimmedName)),
   })
 
   if (!guest) {
     ;[guest] = await db
       .insert(guests)
-      .values({ eventId: event.id, name, avatar, note })
+      .values({ eventId: event.id, name: trimmedName, avatar, note })
       .returning()
   }
 
