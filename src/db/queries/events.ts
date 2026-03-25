@@ -51,3 +51,28 @@ export async function updateEventStatus(id: number, status: "draft" | "active" |
     .returning()
   return event
 }
+
+export async function updateEvent(
+  id: number,
+  data: { title: string; date: string; recipeIds: number[] }
+) {
+  const [event] = await db
+    .update(events)
+    .set({ title: data.title, date: data.date })
+    .where(eq(events.id, id))
+    .returning()
+  if (!event) return null
+
+  await db.delete(eventRecipes).where(eq(eventRecipes.eventId, id))
+  if (data.recipeIds.length) {
+    await db
+      .insert(eventRecipes)
+      .values(data.recipeIds.map((recipeId) => ({ eventId: id, recipeId })))
+  }
+  return event
+}
+
+export async function deleteEvent(id: number) {
+  const [event] = await db.delete(events).where(eq(events.id, id)).returning()
+  return event
+}

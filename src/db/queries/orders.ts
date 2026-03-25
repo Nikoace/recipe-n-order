@@ -63,24 +63,24 @@ export function calculateShoppingList(
     if (qty === 0) continue
 
     for (const ing of recipe.ingredients) {
-      const amount = parseFloat(ing.amount)
-      if (isNaN(amount)) continue
-
-      const total = amount * qty
-      const round2 = (n: number) => Math.round(n * 100) / 100
       const key = `${ing.name}::${ing.unit}`
+      const amount = Number.parseFloat(ing.amount)
+      const isNumeric = !Number.isNaN(amount)
+      const round2 = (n: number) => Math.round(n * 100) / 100
+      const title = recipe.title ?? ""
+
       const existing = ingredientMap.get(key)
       if (existing) {
-        existing.totalAmount = round2(parseFloat(existing.totalAmount) + total).toString()
-        if (!existing.recipes.includes(recipe.title ?? "")) {
-          existing.recipes.push(recipe.title ?? "")
+        if (isNumeric) {
+          existing.totalAmount = round2(Number.parseFloat(existing.totalAmount) + amount * qty).toString()
         }
+        if (!existing.recipes.includes(title)) existing.recipes.push(title)
       } else {
         ingredientMap.set(key, {
           name: ing.name,
-          totalAmount: round2(total).toString(),
-          unit: ing.unit,
-          recipes: [recipe.title ?? ""],
+          totalAmount: isNumeric ? round2(amount * qty).toString() : ing.unit,
+          unit: isNumeric ? ing.unit : "",
+          recipes: [title],
         })
       }
     }

@@ -10,6 +10,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             菜谱管理
           </Link>
           <Link href="/admin/events">聚餐活动</Link>
+          <Link href="/admin/tags">标签</Link>
         </div>
         <form action="/api/auth/logout" method="POST">
           <Button variant="ghost" size="sm" type="submit">退出</Button>

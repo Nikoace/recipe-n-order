@@ -2,6 +2,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { getRecipes } from "@/db/queries/recipes"
 import { difficultyLabel } from "@/lib/utils"
+import { RecipeDeleteButton } from "@/components/admin/RecipeDeleteButton"
 
 export default async function RecipesPage() {
   const allRecipes = await getRecipes()
@@ -30,6 +31,7 @@ export default async function RecipesPage() {
                 <Link href={`/admin/recipes/${recipe.id}/edit`}>
                   <Button variant="outline" size="sm">编辑</Button>
                 </Link>
+                <RecipeDeleteButton id={recipe.id} title={recipe.title} />
               </div>
             </div>
           </div>

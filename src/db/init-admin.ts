@@ -10,6 +10,6 @@ if (!process.env.ADMIN_PASSWORD) {
 }
 
 const hash = await hashPassword(password)
-await db.insert(admins).values({ username, passwordHash: hash }).onConflictDoNothing()
+await db.insert(admins).values({ username, passwordHash: hash }).onConflictDoUpdate({ target: admins.username, set: { passwordHash: hash } })
 console.log(`✅ Admin created: ${username}`)
 process.exit(0)

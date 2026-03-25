@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Recipe & Order
 
-## Getting Started
+聚餐点菜系统。管理员管理菜谱和活动，通过分享链接让访客浏览菜谱并点菜。
 
-First, run the development server:
+## 功能
+
+- 菜谱管理（增删改查、标签、难度、食材、步骤）
+- 聚餐活动管理（创建活动、关联菜谱、发布分享链接）
+- 访客点菜（扫码/访问分享链接、填写姓名、浏览菜谱、提交点菜）
+- 活动汇总（查看所有访客点菜情况）
+
+## 技术栈
+
+- Next.js + TypeScript
+- Drizzle ORM + SQLite (Turso/libsql)
+- Tailwind CSS
+- jose (JWT)、bcrypt（密码哈希）
+
+## 开发
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 环境变量
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+复制 `.env.local.example` 为 `.env.local` 并按需修改：
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+cp .env.local.example .env.local
+```
 
-## Learn More
+| 变量 | 说明 | 默认值 |
+|------|------|--------|
+| `DATABASE_URL` | SQLite/Turso 数据库地址 | - |
+| `DATABASE_AUTH_TOKEN` | Turso 认证 token（远程时需要） | - |
+| `JWT_SECRET` | JWT 签名密钥（至少 32 位） | dev-secret |
+| `ADMIN_USERNAME` | 管理员用户名 | admin |
+| `ADMIN_PASSWORD` | 管理员密码 | changeme123 |
 
-To learn more about Next.js, take a look at the following resources:
+### 数据库初始化
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+# 推送 schema
+npm run db:push
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# 初始化管理员（会更新已有管理员的密码）
+npm run db:init-admin
+```
 
-## Deploy on Vercel
+## 使用流程
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. 登录管理后台 `/admin`
+2. 添加菜谱
+3. 创建聚餐活动，关联菜谱，将状态改为「发布」
+4. 复制分享链接发给访客
+5. 访客填写姓名后可浏览菜谱、提交点菜
+6. 在活动详情页查看汇总

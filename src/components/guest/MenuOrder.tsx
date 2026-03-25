@@ -8,6 +8,7 @@ import { difficultyLabel } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import QuantityStepper from "@/components/guest/QuantityStepper"
+import { Textarea } from "@/components/ui/textarea"
 
 interface OrderItem {
   recipeId: number
@@ -43,6 +44,14 @@ export default function MenuOrder({
     }
     return q
   })
+  const [notes, setNotes] = useState<Record<number, string>>(() => {
+    if (!currentOrder) return {}
+    const n: Record<number, string> = {}
+    for (const item of currentOrder.items) {
+      if (item.note) n[item.recipeId] = item.note
+    }
+    return n
+  })
   const [loading, setLoading] = useState(false)
   const [order, setOrder] = useState<CurrentOrder | null>(currentOrder)
 
@@ -57,7 +66,7 @@ export default function MenuOrder({
     try {
       const items = Object.entries(quantities)
         .filter(([, v]) => v > 0)
-        .map(([k, v]) => ({ recipeId: Number(k), quantity: v }))
+        .map(([k, v]) => ({ recipeId: Number(k), quantity: v, note: notes[Number(k)] || undefined }))
 
       const res = await fetch("/api/orders", {
         method: "POST",
@@ -122,6 +131,7 @@ export default function MenuOrder({
                 <Badge variant="secondary">
                   {difficultyLabel(recipe.difficulty)}
                 </Badge>
+                <Badge variant="outline">{recipe.servings} 人份</Badge>
                 {recipe.cookTime != null && (
                   <Badge variant="outline">{recipe.cookTime} 分钟</Badge>
                 )}
@@ -131,6 +141,15 @@ export default function MenuOrder({
                 onChange={(n) => handleQuantityChange(recipe.id, n)}
                 disabled={isClosed}
               />
+              {!isClosed && (quantities[recipe.id] ?? 0) > 0 && (
+                <Textarea
+                  placeholder="备注（可选）"
+                  value={notes[recipe.id] ?? ""}
+                  onChange={(e) => setNotes((prev) => ({ ...prev, [recipe.id]: e.target.value }))}
+                  className="mt-2 text-sm resize-none"
+                  rows={2}
+                />
+              )}
             </div>
           </div>
         ))}

@@ -115,7 +115,7 @@ export function RecipeForm({ recipe, tags, selectedTagIds = [], mode }: Props) {
       <div className="grid grid-cols-3 gap-4">
         <div>
           <Label>难度</Label>
-          <Select name="difficulty" defaultValue={recipe?.difficulty ?? "medium"}>
+          <Select name="difficulty" defaultValue={recipe?.difficulty ?? "medium"} items={{ easy: "简单", medium: "中等", hard: "困难" }}>
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>

@@ -1,3 +1,4 @@
+import * as bcrypt from "bcrypt"
 import { SignJWT, jwtVerify } from "jose"
 
 const JWT_SECRET = new TextEncoder().encode(
@@ -27,9 +28,9 @@ export async function verifyToken(token: string): Promise<AdminPayload | null> {
 }
 
 export async function hashPassword(password: string): Promise<string> {
-  return Bun.password.hash(password)
+  return bcrypt.hash(password, 10)
 }
 
 export async function verifyPassword(password: string, hash: string): Promise<boolean> {
-  return Bun.password.verify(password, hash)
+  return bcrypt.compare(password, hash)
 }
