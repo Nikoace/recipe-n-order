@@ -20,7 +20,7 @@ export default function JoinForm({ shareCode, eventTitle, eventDate, isClosed }:
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault()
     setError("")
     setLoading(true)
