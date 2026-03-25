@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getRecipeById, updateRecipe, deleteRecipe, setRecipeTags } from "@/db/queries/recipes"
-import { verifyToken } from "@/lib/auth"
-import { cookies } from "next/headers"
+import {
+  getRecipeById,
+  updateRecipe,
+  deleteRecipe,
+  setRecipeTags,
+  getRecipeDeleteBlockers,
+} from "@/db/queries/recipes"
+import { requireAdmin } from "@/lib/admin-auth"
 
 export async function GET(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -11,10 +16,8 @@ export async function GET(_: NextRequest, { params }: { params: Promise<{ id: st
 }
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const token = (await cookies()).get("admin-token")?.value
-  if (!token || !(await verifyToken(token))) {
-    return NextResponse.json({ error: "未授权" }, { status: 401 })
-  }
+  const authError = await requireAdmin()
+  if (authError) return authError
 
   const { id } = await params
   const { tagIds, ...data } = await req.json()
@@ -27,16 +30,27 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 }
 
 export async function DELETE(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const token = (await cookies()).get("admin-token")?.value
-  if (!token || !(await verifyToken(token))) {
-    return NextResponse.json({ error: "未授权" }, { status: 401 })
-  }
+  const authError = await requireAdmin()
+  if (authError) return authError
 
   const { id } = await params
   const numId = Number(id)
   if (isNaN(numId)) return NextResponse.json({ error: "无效 ID" }, { status: 400 })
   const existing = await getRecipeById(numId)
   if (!existing) return NextResponse.json({ error: "未找到" }, { status: 404 })
+
+  const blockers = await getRecipeDeleteBlockers(numId)
+  if (blockers.eventCount > 0 || blockers.orderCount > 0) {
+    const reasons: string[] = []
+    if (blockers.eventCount > 0) reasons.push(`已被 ${blockers.eventCount} 个活动菜单引用`)
+    if (blockers.orderCount > 0) reasons.push(`已有 ${blockers.orderCount} 条点菜记录`)
+
+    return NextResponse.json(
+      { error: `该菜谱${reasons.join("，")}，无法删除` },
+      { status: 409 }
+    )
+  }
+
   await deleteRecipe(numId)
   return NextResponse.json({ ok: true })
 }

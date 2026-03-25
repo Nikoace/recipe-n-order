@@ -23,7 +23,7 @@ export function RecipeDeleteButton({ id, title }: { id: number; title: string })
     <ConfirmDialog
       trigger={<Button type="button" variant="outline" size="sm">删除</Button>}
       title="删除菜谱"
-      description={`确认删除「${title}」？此操作不可撤销。`}
+      description={`确认删除「${title}」？若已被活动或点菜记录引用，将无法删除。`}
       confirmLabel="删除"
       onConfirm={handleDelete}
     />

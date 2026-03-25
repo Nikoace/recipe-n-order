@@ -1,8 +1,9 @@
 import { cookies } from "next/headers"
 import { notFound, redirect } from "next/navigation"
-import { getEventByShareCode, getEventRecipes } from "@/db/queries/events"
+import { getEventRecipes } from "@/db/queries/events"
 import { getGuestOrder } from "@/db/queries/orders"
 import MenuOrder from "@/components/guest/MenuOrder"
+import { getGuestEvent } from "@/lib/guest-event-access"
 
 export default async function MenuPage({
   params,
@@ -22,10 +23,11 @@ export default async function MenuPage({
     redirect(`/e/${code}`)
   }
 
-  const event = await getEventByShareCode(code)
-  if (!event || event.status === "draft") {
+  const access = await getGuestEvent(code, "view")
+  if (!access.ok) {
     notFound()
   }
+  const event = access.event
 
   const eventRecipes = await getEventRecipes(event.id)
   const recipes = eventRecipes.map((r) => r.recipe)

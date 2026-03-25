@@ -48,3 +48,5 @@ local.db
 
 # git worktrees
 .worktrees/
+.gitnexus
+.claude/

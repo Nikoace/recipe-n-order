@@ -4,8 +4,12 @@ import { getOrdersByEvent, calculateShoppingList } from "@/db/queries/orders"
 import { db } from "@/db"
 import { guests } from "@/db/schema"
 import { eq } from "drizzle-orm"
+import { requireAdmin } from "@/lib/admin-auth"
 
 export async function GET(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const authError = await requireAdmin()
+  if (authError) return authError
+
   const { id } = await params
   const eventId = Number(id)
   if (isNaN(eventId)) return NextResponse.json({ error: "无效 ID" }, { status: 400 })

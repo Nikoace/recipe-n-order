@@ -2,17 +2,11 @@ import { NextRequest, NextResponse } from "next/server"
 import { db } from "@/db"
 import { tags } from "@/db/schema"
 import { eq } from "drizzle-orm"
-import { verifyToken } from "@/lib/auth"
-import { cookies } from "next/headers"
-
-async function requireAdmin() {
-  const token = (await cookies()).get("admin-token")?.value
-  if (!token || !(await verifyToken(token))) return false
-  return true
-}
+import { requireAdmin } from "@/lib/admin-auth"
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  if (!(await requireAdmin())) return NextResponse.json({ error: "未授权" }, { status: 401 })
+  const authError = await requireAdmin()
+  if (authError) return authError
 
   const { id } = await params
   const numId = Number(id)
@@ -25,7 +19,8 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 }
 
 export async function DELETE(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  if (!(await requireAdmin())) return NextResponse.json({ error: "未授权" }, { status: 401 })
+  const authError = await requireAdmin()
+  if (authError) return authError
 
   const { id } = await params
   const numId = Number(id)

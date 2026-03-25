@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { db } from "@/db"
 import { tags } from "@/db/schema"
-import { verifyToken } from "@/lib/auth"
-import { cookies } from "next/headers"
+import { requireAdmin } from "@/lib/admin-auth"
 
 export async function GET() {
   const all = await db.select().from(tags).orderBy(tags.name)
@@ -10,10 +9,8 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-  const token = (await cookies()).get("admin-token")?.value
-  if (!token || !(await verifyToken(token))) {
-    return NextResponse.json({ error: "未授权" }, { status: 401 })
-  }
+  const authError = await requireAdmin()
+  if (authError) return authError
 
   const { name, color } = await req.json()
   const [tag] = await db.insert(tags).values({ name, color }).returning()

@@ -1,13 +1,10 @@
 import { NextRequest, NextResponse } from "next/server"
 import { uploadImage } from "@/lib/storage"
-import { verifyToken } from "@/lib/auth"
-import { cookies } from "next/headers"
+import { requireAdmin } from "@/lib/admin-auth"
 
 export async function POST(req: NextRequest) {
-  const token = (await cookies()).get("admin-token")?.value
-  if (!token || !(await verifyToken(token))) {
-    return NextResponse.json({ error: "未授权" }, { status: 401 })
-  }
+  const authError = await requireAdmin()
+  if (authError) return authError
 
   const formData = await req.formData()
   const file = formData.get("file") as File

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { db } from "@/db"
 import { guests } from "@/db/schema"
 import { eq, and } from "drizzle-orm"
-import { getEventByShareCode } from "@/db/queries/events"
+import { getGuestEvent } from "@/lib/guest-event-access"
 
 export async function POST(req: NextRequest) {
   const { shareCode, name, avatar, note } = await req.json()
@@ -15,13 +15,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "昵称不能为空" }, { status: 400 })
   }
 
-  const event = await getEventByShareCode(shareCode)
-  if (!event) {
-    return NextResponse.json({ error: "活动不存在" }, { status: 404 })
+  const access = await getGuestEvent(shareCode, "join")
+  if (!access.ok) {
+    return NextResponse.json({ error: access.error }, { status: access.status })
   }
-  if (event.status === "closed") {
-    return NextResponse.json({ error: "活动已结束" }, { status: 403 })
-  }
+  const event = access.event
 
   // 检查该昵称在该活动中是否已存在
   let guest = await db.query.guests.findFirst({

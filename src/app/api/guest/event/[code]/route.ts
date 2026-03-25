@@ -1,18 +1,17 @@
 import { NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
-import { getEventByShareCode, getEventRecipes } from "@/db/queries/events"
+import { getEventRecipes } from "@/db/queries/events"
 import { getGuestOrder } from "@/db/queries/orders"
+import { getGuestEvent } from "@/lib/guest-event-access"
 
 export async function GET(_: NextRequest, { params }: { params: Promise<{ code: string }> }) {
   const { code } = await params
 
-  const event = await getEventByShareCode(code)
-  if (!event) {
-    return NextResponse.json({ error: "活动不存在" }, { status: 404 })
+  const access = await getGuestEvent(code, "view")
+  if (!access.ok) {
+    return NextResponse.json({ error: access.error }, { status: access.status })
   }
-  if (event.status === "draft") {
-    return NextResponse.json({ error: "活动不存在" }, { status: 404 })
-  }
+  const event = access.event
 
   const eventRecipes = await getEventRecipes(event.id)
   const recipes = eventRecipes.map((r) => r.recipe)

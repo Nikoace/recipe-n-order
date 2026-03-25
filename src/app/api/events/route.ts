@@ -1,18 +1,18 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getEvents, createEvent } from "@/db/queries/events"
-import { verifyToken } from "@/lib/auth"
-import { cookies } from "next/headers"
+import { requireAdmin } from "@/lib/admin-auth"
 
 export async function GET() {
+  const authError = await requireAdmin()
+  if (authError) return authError
+
   const data = await getEvents()
   return NextResponse.json(data)
 }
 
 export async function POST(req: NextRequest) {
-  const token = (await cookies()).get("admin-token")?.value
-  if (!token || !(await verifyToken(token))) {
-    return NextResponse.json({ error: "未授权" }, { status: 401 })
-  }
+  const authError = await requireAdmin()
+  if (authError) return authError
 
   const { title, date, recipeIds } = await req.json()
   if (!title || !date) {

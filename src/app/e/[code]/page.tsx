@@ -1,7 +1,7 @@
 import { cookies } from "next/headers"
 import { notFound, redirect } from "next/navigation"
-import { getEventByShareCode } from "@/db/queries/events"
 import JoinForm from "@/components/guest/JoinForm"
+import { getGuestEvent } from "@/lib/guest-event-access"
 
 export default async function EventEntryPage({
   params,
@@ -11,11 +11,11 @@ export default async function EventEntryPage({
   const { code } = await params
   const cookieStore = await cookies()
 
-  const event = await getEventByShareCode(code)
-
-  if (!event || event.status === "draft") {
+  const access = await getGuestEvent(code, "view")
+  if (!access.ok) {
     notFound()
   }
+  const event = access.event
 
   const guestCookie = cookieStore.get(`guest-${code}`)
   if (guestCookie) {
