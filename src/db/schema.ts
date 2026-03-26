@@ -78,6 +78,7 @@ export const orders = sqliteTable("orders", {
     Array<{ recipeId: number; quantity: number; note?: string }>
   >().notNull().default(sql`'[]'`),
   createdAt: text("created_at").default(sql`(datetime('now'))`).notNull(),
+  updatedAt: text("updated_at").default(sql`(datetime('now'))`).notNull(),
 })
 
 // 类型导出

@@ -1,7 +1,53 @@
 import { db } from "@/db"
-import { orders } from "@/db/schema"
-import { eq } from "drizzle-orm"
+import { orders, guests, recipes, eventRecipes } from "@/db/schema"
+import { eq, sql } from "drizzle-orm"
 import type { Recipe, Order } from "@/db/schema"
+
+export type GuestOrderEntry = {
+  guestId: number
+  guestName: string
+  items: Array<{ recipeId: number; recipeTitle: string; quantity: number; note?: string }>
+}
+
+export async function getEventOrdersWithGuests(eventId: number): Promise<GuestOrderEntry[]> {
+  const [orderRows, eventRecipeRows] = await Promise.all([
+    db
+      .select({ guestId: orders.guestId, guestName: guests.name, items: orders.items })
+      .from(orders)
+      .innerJoin(guests, eq(orders.guestId, guests.id))
+      .where(eq(orders.eventId, eventId)),
+    db
+      .select({ id: recipes.id, title: recipes.title })
+      .from(eventRecipes)
+      .innerJoin(recipes, eq(eventRecipes.recipeId, recipes.id))
+      .where(eq(eventRecipes.eventId, eventId)),
+  ])
+
+  const recipeMap = new Map(eventRecipeRows.map((r) => [r.id, r.title]))
+
+  return orderRows
+    .map((row) => ({
+      guestId: row.guestId,
+      guestName: row.guestName,
+      items: row.items
+        .filter((item) => item.quantity > 0)
+        .map((item) => ({
+          recipeId: item.recipeId,
+          recipeTitle: recipeMap.get(item.recipeId) ?? "未知菜品",
+          quantity: item.quantity,
+          note: item.note,
+        })),
+    }))
+    .filter((row) => row.items.length > 0)
+}
+
+export async function getOrdersLatestUpdate(eventId: number): Promise<string | null> {
+  const result = await db
+    .select({ latest: sql<string>`MAX(updated_at)` })
+    .from(orders)
+    .where(eq(orders.eventId, eventId))
+  return result[0]?.latest ?? null
+}
 
 export async function getOrdersByEvent(eventId: number) {
   return db.query.orders.findMany({
@@ -24,7 +70,7 @@ export async function upsertOrder(
   if (existing) {
     const [updated] = await db
       .update(orders)
-      .set({ items })
+      .set({ items, updatedAt: new Date().toISOString() })
       .where(eq(orders.id, existing.id))
       .returning()
     return updated

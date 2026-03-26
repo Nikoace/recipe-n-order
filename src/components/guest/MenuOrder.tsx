@@ -8,6 +8,7 @@ import { difficultyLabel } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import QuantityStepper from "@/components/guest/QuantityStepper"
+import { OthersOrders } from "@/components/guest/OthersOrders"
 import { Textarea } from "@/components/ui/textarea"
 import { ImageOff, ShoppingCart, Send } from "lucide-react"
 
@@ -28,6 +29,7 @@ interface MenuOrderProps {
   recipes: Recipe[]
   currentOrder: CurrentOrder | null
   eventStatus: "draft" | "active" | "closed"
+  guestId: number
 }
 
 export default function MenuOrder({
@@ -36,6 +38,7 @@ export default function MenuOrder({
   recipes,
   currentOrder,
   eventStatus,
+  guestId,
 }: MenuOrderProps) {
   const [quantities, setQuantities] = useState<Record<number, number>>(() => {
     if (!currentOrder) return {}
@@ -155,6 +158,8 @@ export default function MenuOrder({
           </div>
         ))}
       </div>
+
+      <OthersOrders shareCode={shareCode} myGuestId={guestId} />
 
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t px-4 py-3">
         <div className="max-w-lg mx-auto flex items-center justify-between">

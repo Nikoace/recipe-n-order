@@ -41,6 +41,7 @@ export default async function MenuPage({
       recipes={recipes}
       currentOrder={order ?? null}
       eventStatus={event.status}
+      guestId={guestId}
     />
   )
 }
