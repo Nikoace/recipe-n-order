@@ -46,6 +46,9 @@ next-env.d.ts
 local.db
 *.db
 
+# local dev uploads
+/public/uploads/
+
 # git worktrees
 .worktrees/
 .gitnexus
