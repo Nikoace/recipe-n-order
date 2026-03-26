@@ -1,5 +1,6 @@
 "use client"
 import { useState } from "react"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Plus, X, Upload } from "lucide-react"
@@ -41,6 +42,8 @@ export function StepEditor({ value, onChange, onImageUpload }: Props) {
     try {
       const url = await onImageUpload(file)
       update(i, "imageUrl", url)
+    } catch {
+      toast.error("步骤图片上传失败，请重试")
     } finally {
       setUploading(null)
     }
