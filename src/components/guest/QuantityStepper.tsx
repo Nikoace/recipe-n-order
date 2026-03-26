@@ -1,6 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
+import { Minus, Plus } from "lucide-react"
 
 interface QuantityStepperProps {
   value: number
@@ -27,7 +28,7 @@ export default function QuantityStepper({
         disabled={value <= minimum || disabled}
         aria-label="减少数量"
       >
-        -
+        <Minus className="h-3.5 w-3.5" />
       </Button>
       <span className="min-w-[1ch] text-center">{value}</span>
       <Button
@@ -38,7 +39,7 @@ export default function QuantityStepper({
         disabled={disabled}
         aria-label="增加数量"
       >
-        +
+        <Plus className="h-3.5 w-3.5" />
       </Button>
     </div>
   )

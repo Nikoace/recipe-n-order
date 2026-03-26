@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Plus, X } from "lucide-react"
 
 const PRESET_UNITS = ["g", "kg", "ml", "L", "个", "只", "条", "块", "片", "根", "把", "勺", "碗", "杯", "适量", "少许"]
 const NO_AMOUNT_UNITS = new Set(["适量", "少许"])
@@ -95,12 +96,12 @@ export function IngredientsEditor({ value, onChange }: Props) {
                 autoFocus
               />
             )}
-            <Button type="button" variant="ghost" size="sm" onClick={() => remove(i)}>删除</Button>
+            <Button type="button" variant="ghost" size="sm" onClick={() => remove(i)}><X className="h-4 w-4" /></Button>
           </div>
         )
       })}
       <Button variant="outline" size="sm" onClick={add} type="button">
-        + 添加食材
+        <Plus className="h-4 w-4 mr-1" />添加食材
       </Button>
     </div>
   )

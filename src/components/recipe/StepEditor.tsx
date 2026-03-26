@@ -2,6 +2,7 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
+import { Plus, X, Upload } from "lucide-react"
 
 interface Step {
   order: number
@@ -51,7 +52,7 @@ export function StepEditor({ value, onChange, onImageUpload }: Props) {
         <div key={i} className="border rounded-lg p-4 space-y-2">
           <div className="flex items-center justify-between">
             <span className="font-medium text-sm">步骤 {i + 1}</span>
-            <Button variant="ghost" size="sm" onClick={() => remove(i)}>删除</Button>
+            <Button variant="ghost" size="sm" onClick={() => remove(i)}><X className="h-4 w-4" /></Button>
           </div>
           <Textarea
             placeholder="步骤描述..."
@@ -64,7 +65,7 @@ export function StepEditor({ value, onChange, onImageUpload }: Props) {
           )}
           <div>
             <label className="text-sm text-muted-foreground cursor-pointer hover:text-foreground">
-              {uploading === i ? "上传中..." : "上传步骤图片"}
+              <span className="flex items-center gap-1"><Upload className="h-3.5 w-3.5" />{uploading === i ? "上传中..." : "上传步骤图片"}</span>
               <input
                 type="file"
                 accept="image/*"
@@ -77,7 +78,7 @@ export function StepEditor({ value, onChange, onImageUpload }: Props) {
         </div>
       ))}
       <Button variant="outline" size="sm" onClick={add} type="button">
-        + 添加步骤
+        <Plus className="h-4 w-4 mr-1" />添加步骤
       </Button>
     </div>
   )

@@ -1,6 +1,7 @@
 import { getRecipes } from "@/db/queries/recipes"
 import { difficultyLabel } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
+import { UtensilsCrossed, Gauge, Clock } from "lucide-react"
 
 export default async function Home() {
   const recipes = await getRecipes()
@@ -31,17 +32,17 @@ export default async function Home() {
                 />
               ) : (
                 <div className="w-full h-48 bg-orange-50 flex items-center justify-center">
-                  <span className="text-4xl">🍽</span>
+                  <UtensilsCrossed className="h-12 w-12 text-orange-300" />
                 </div>
               )}
               <div className="p-4">
                 <h2 className="font-semibold text-lg">{recipe.title}</h2>
                 <div className="flex gap-2 mt-1 flex-wrap">
-                  <Badge variant="secondary">
-                    {difficultyLabel(recipe.difficulty)}
+                  <Badge variant="secondary" className="flex items-center gap-1">
+                    <Gauge className="h-3 w-3" />{difficultyLabel(recipe.difficulty)}
                   </Badge>
                   {recipe.cookTime != null && (
-                    <Badge variant="outline">{recipe.cookTime} 分钟</Badge>
+                    <Badge variant="outline" className="flex items-center gap-1"><Clock className="h-3 w-3" />{recipe.cookTime} 分钟</Badge>
                   )}
                 </div>
                 {recipe.description && (

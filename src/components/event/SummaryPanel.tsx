@@ -2,6 +2,7 @@
 import { useEffect, useState, useCallback } from "react"
 import { Badge } from "@/components/ui/badge"
 import { ShoppingList } from "./ShoppingList"
+import { Users, ClipboardList } from "lucide-react"
 
 interface SummaryData {
   guests: Array<{ id: number; name: string }>
@@ -29,7 +30,7 @@ export function SummaryPanel({ eventId }: { eventId: number }) {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="font-semibold mb-2">参与者 ({data.guests.length}人)</h2>
+        <h2 className="font-semibold mb-2 flex items-center gap-1.5"><Users className="h-4 w-4" />参与者 ({data.guests.length}人)</h2>
         <div className="flex flex-wrap gap-2">
           {data.guests.map((g) => (
             <Badge key={g.id} variant="secondary">{g.name}</Badge>
@@ -38,7 +39,7 @@ export function SummaryPanel({ eventId }: { eventId: number }) {
       </div>
 
       <div>
-        <h2 className="font-semibold mb-2">菜品汇总</h2>
+        <h2 className="font-semibold mb-2 flex items-center gap-1.5"><ClipboardList className="h-4 w-4" />菜品汇总</h2>
         <div className="space-y-2">
           {data.recipeSummary
             .filter((r) => r.totalQuantity > 0)

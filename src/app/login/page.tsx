@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { ChefHat, User, Lock, LogIn } from "lucide-react"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -42,22 +43,30 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-orange-50">
       <Card className="w-full max-w-sm shadow-lg">
         <CardHeader className="text-center">
-          <div className="text-4xl mb-2">🍳</div>
+          <div className="flex justify-center mb-2">
+            <ChefHat className="h-12 w-12 text-orange-500" />
+          </div>
           <CardTitle className="text-2xl">管理员登录</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1">
               <Label htmlFor="username">用户名</Label>
-              <Input id="username" name="username" autoComplete="username" required />
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input id="username" name="username" autoComplete="username" required className="pl-9" />
+              </div>
             </div>
             <div className="space-y-1">
               <Label htmlFor="password">密码</Label>
-              <Input id="password" name="password" type="password" autoComplete="current-password" required />
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input id="password" name="password" type="password" autoComplete="current-password" required className="pl-9" />
+              </div>
             </div>
             {error && <p className="text-sm text-red-500">{error}</p>}
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "登录中..." : "登录"}
+              {loading ? "登录中..." : <><LogIn className="h-4 w-4 mr-1" />登录</>}
             </Button>
           </form>
         </CardContent>

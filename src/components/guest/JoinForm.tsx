@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { formatDate } from "@/lib/utils"
+import { UserPlus, AlertTriangle } from "lucide-react"
 
 interface JoinFormProps {
   shareCode: string
@@ -51,8 +52,8 @@ export default function JoinForm({ shareCode, eventTitle, eventDate, isClosed }:
       </div>
 
       {isClosed && (
-        <div className="rounded-lg bg-amber-50 border border-amber-200 px-4 py-3 text-amber-800 text-sm">
-          此活动已结束，仅供查看
+        <div className="rounded-lg bg-amber-50 border border-amber-200 px-4 py-3 text-amber-800 text-sm flex items-center gap-2">
+          <AlertTriangle className="h-4 w-4 shrink-0" />此活动已结束，仅供查看
         </div>
       )}
 
@@ -69,7 +70,7 @@ export default function JoinForm({ shareCode, eventTitle, eventDate, isClosed }:
         </div>
         {error && <p className="text-sm text-red-500">{error}</p>}
         <Button type="submit" className="w-full" disabled={loading || isClosed}>
-          {loading ? "加入中..." : "加入活动"}
+          {loading ? "加入中..." : <><UserPlus className="h-4 w-4 mr-1" />加入活动</>}
         </Button>
       </form>
     </div>

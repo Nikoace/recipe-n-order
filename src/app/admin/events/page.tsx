@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { getEvents } from "@/db/queries/events"
 import { formatDate } from "@/lib/utils"
+import { Plus, Eye } from "lucide-react"
 
 const statusLabels = { draft: "草稿", active: "进行中", closed: "已结束" }
 const statusVariants = {
@@ -19,7 +20,7 @@ export default async function EventsPage() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">聚餐活动</h1>
         <Link href="/admin/events/new">
-          <Button>新建活动</Button>
+          <Button><Plus className="h-4 w-4 mr-1" />新建活动</Button>
         </Link>
       </div>
 
@@ -35,7 +36,7 @@ export default async function EventsPage() {
                 {statusLabels[event.status]}
               </Badge>
               <Link href={`/admin/events/${event.id}`}>
-                <Button variant="outline" size="sm">查看</Button>
+                <Button variant="outline" size="sm"><Eye className="h-3.5 w-3.5 mr-1" />查看</Button>
               </Link>
             </div>
           </div>

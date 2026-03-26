@@ -2,6 +2,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
+import { Play, Square } from "lucide-react"
 
 interface Props {
   eventId: number
@@ -31,9 +32,13 @@ export function EventStatusButton({ eventId, currentStatus }: Props) {
     }
   }
 
+  const icon = currentStatus === "active"
+    ? <Square className="h-3.5 w-3.5 mr-1" />
+    : <Play className="h-3.5 w-3.5 mr-1" />
+
   return (
     <Button variant="outline" size="sm" onClick={handleClick} disabled={loading}>
-      {loading ? "处理中..." : label}
+      {loading ? "处理中..." : <>{icon}{label}</>}
     </Button>
   )
 }

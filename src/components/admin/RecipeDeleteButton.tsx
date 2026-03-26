@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { ConfirmDialog } from "./ConfirmDialog"
+import { Trash2 } from "lucide-react"
 
 export function RecipeDeleteButton({ id, title }: { id: number; title: string }) {
   const router = useRouter()
@@ -21,9 +22,9 @@ export function RecipeDeleteButton({ id, title }: { id: number; title: string })
 
   return (
     <ConfirmDialog
-      trigger={<Button type="button" variant="outline" size="sm">删除</Button>}
+      trigger={<Button type="button" variant="outline" size="sm"><Trash2 className="h-3.5 w-3.5 mr-1" />删除</Button>}
       title="删除菜谱"
-      description={`确认删除「${title}」？若已被活动或点菜记录引用，将无法删除。`}
+      description={`确认删除「${title}」？此操作不可撤销。`}
       confirmLabel="删除"
       onConfirm={handleDelete}
     />

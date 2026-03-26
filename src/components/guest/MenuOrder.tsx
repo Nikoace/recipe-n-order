@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import QuantityStepper from "@/components/guest/QuantityStepper"
 import { Textarea } from "@/components/ui/textarea"
+import { ImageOff, ShoppingCart, Send } from "lucide-react"
 
 interface OrderItem {
   recipeId: number
@@ -115,8 +116,8 @@ export default function MenuOrder({
                   className="w-20 h-20 object-cover rounded"
                 />
               ) : (
-                <div className="w-20 h-20 bg-gray-100 rounded flex items-center justify-center text-gray-400 text-xs">
-                  无图片
+                <div className="w-20 h-20 bg-gray-100 rounded flex items-center justify-center text-gray-400">
+                  <ImageOff className="h-6 w-6" />
                 </div>
               )}
             </div>
@@ -157,13 +158,13 @@ export default function MenuOrder({
 
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t px-4 py-3">
         <div className="max-w-lg mx-auto flex items-center justify-between">
-          <span className="text-sm text-gray-600">已选 {total} 道菜</span>
+          <span className="text-sm text-gray-600 flex items-center gap-1.5"><ShoppingCart className="h-4 w-4" />已选 {total} 道菜</span>
           {!isClosed && (
             <Button
               onClick={handleSubmit}
               disabled={total === 0 || loading}
             >
-              {loading ? "提交中..." : order ? "更新点菜" : "提交点菜"}
+              {loading ? "提交中..." : <><Send className="h-4 w-4 mr-1" />{order ? "更新点菜" : "提交点菜"}</>}
             </Button>
           )}
         </div>

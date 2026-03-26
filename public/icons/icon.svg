@@ -1,0 +1,70 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="1024"
+  height="1024"
+  viewBox="0 0 1024 1024"
+  fill="none"
+>
+  <defs>
+    <linearGradient id="bg" x1="164" y1="104" x2="884" y2="932" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FB923C" />
+      <stop offset="1" stop-color="#EA580C" />
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse"
+      gradientTransform="translate(256 196) rotate(49.7) scale(362 308)">
+      <stop stop-color="#FDE68A" stop-opacity="0.72" />
+      <stop offset="1" stop-color="#FDE68A" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <rect x="32" y="32" width="960" height="960" rx="240" fill="url(#bg)" />
+  <circle cx="250" cy="198" r="248" fill="url(#glow)" />
+
+  <g opacity="0.16">
+    <circle cx="820" cy="810" r="168" fill="#FFF7ED" />
+    <path
+      d="M738 734C790 700 864 708 904 764C946 824 936 900 894 944C834 914 776 860 738 734Z"
+      fill="#FFF7ED"
+    />
+  </g>
+
+  <g stroke="#FFF7ED" stroke-linecap="round" stroke-width="28" opacity="0.92">
+    <path d="M386 214C356 256 356 304 386 346C410 380 410 418 386 454" />
+    <path d="M500 182C470 226 470 282 500 326C524 360 524 402 500 438" />
+    <path d="M614 214C584 256 584 304 614 346C638 380 638 418 614 454" />
+  </g>
+
+  <ellipse cx="512" cy="718" rx="300" ry="58" fill="#9A3412" opacity="0.18" />
+
+  <g>
+    <path
+      d="M300 594C300 461 395 360 512 360C629 360 724 461 724 594H300Z"
+      fill="#FFF7ED"
+    />
+    <path
+      d="M346 594C346 492 420 414 512 414C604 414 678 492 678 594"
+      stroke="#FED7AA"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="28"
+    />
+    <rect x="230" y="602" width="564" height="74" rx="37" fill="#FFF7ED" />
+    <rect x="286" y="620" width="452" height="16" rx="8" fill="#FDBA74" opacity="0.9" />
+    <rect x="496" y="332" width="32" height="42" rx="16" fill="#FFF7ED" />
+    <circle cx="512" cy="304" r="38" fill="#FFF7ED" />
+  </g>
+
+  <g transform="rotate(12 720 332)">
+    <rect x="622" y="230" width="196" height="196" rx="42" fill="white" />
+    <rect x="662" y="276" width="118" height="24" rx="12" fill="#FDBA74" />
+    <rect x="662" y="322" width="118" height="24" rx="12" fill="#FDBA74" />
+    <circle cx="710" cy="376" r="36" fill="#F97316" />
+    <path
+      d="M694 376L706 388L728 360"
+      stroke="white"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="18"
+    />
+  </g>
+</svg>

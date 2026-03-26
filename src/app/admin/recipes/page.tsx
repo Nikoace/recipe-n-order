@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { getRecipes } from "@/db/queries/recipes"
 import { difficultyLabel } from "@/lib/utils"
 import { RecipeDeleteButton } from "@/components/admin/RecipeDeleteButton"
+import { Plus, Pencil } from "lucide-react"
 
 export default async function RecipesPage() {
   const allRecipes = await getRecipes()
@@ -12,7 +13,7 @@ export default async function RecipesPage() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">菜谱管理</h1>
         <Link href="/admin/recipes/new">
-          <Button>新建菜谱</Button>
+          <Button><Plus className="h-4 w-4 mr-1" />新建菜谱</Button>
         </Link>
       </div>
 
@@ -29,7 +30,7 @@ export default async function RecipesPage() {
               </p>
               <div className="flex gap-2 mt-3">
                 <Link href={`/admin/recipes/${recipe.id}/edit`}>
-                  <Button variant="outline" size="sm">编辑</Button>
+                  <Button variant="outline" size="sm"><Pencil className="h-3.5 w-3.5 mr-1" />编辑</Button>
                 </Link>
                 <RecipeDeleteButton id={recipe.id} title={recipe.title} />
               </div>

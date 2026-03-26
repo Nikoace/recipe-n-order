@@ -3,6 +3,7 @@ import Link from "next/link"
 import { getRecipeById } from "@/db/queries/recipes"
 import { Badge } from "@/components/ui/badge"
 import { difficultyLabel } from "@/lib/utils"
+import { ArrowLeft, Gauge, Clock, Users, Carrot, ListOrdered } from "lucide-react"
 
 export default async function RecipeDetailPage({
   params,
@@ -19,8 +20,8 @@ export default async function RecipeDetailPage({
   return (
     <div className="max-w-lg mx-auto pb-8">
       <div className="mb-4">
-        <Link href={`/e/${code}/menu`} className="text-orange-500 hover:underline">
-          ← 返回菜单
+        <Link href={`/e/${code}/menu`} className="text-orange-500 hover:underline flex items-center gap-1">
+          <ArrowLeft className="h-4 w-4" />返回菜单
         </Link>
       </div>
 
@@ -36,12 +37,12 @@ export default async function RecipeDetailPage({
       <h1 className="text-2xl font-bold mt-4">{recipe.title}</h1>
 
       <div className="flex flex-wrap gap-2 mt-3">
-        <Badge variant="secondary">{difficultyLabel(recipe.difficulty)}</Badge>
+        <Badge variant="secondary" className="flex items-center gap-1"><Gauge className="h-3 w-3" />{difficultyLabel(recipe.difficulty)}</Badge>
         {recipe.cookTime && (
-          <Badge variant="outline">{recipe.cookTime} 分钟</Badge>
+          <Badge variant="outline" className="flex items-center gap-1"><Clock className="h-3 w-3" />{recipe.cookTime} 分钟</Badge>
         )}
         {recipe.servings && (
-          <Badge variant="outline">{recipe.servings} 人份</Badge>
+          <Badge variant="outline" className="flex items-center gap-1"><Users className="h-3 w-3" />{recipe.servings} 人份</Badge>
         )}
       </div>
 
@@ -51,7 +52,7 @@ export default async function RecipeDetailPage({
 
       {recipe.ingredients?.length > 0 && (
         <section>
-          <h2 className="text-lg font-semibold mt-6 mb-2">食材</h2>
+          <h2 className="text-lg font-semibold mt-6 mb-2 flex items-center gap-1.5"><Carrot className="h-4 w-4 text-orange-500" />食材</h2>
           <ul className="divide-y divide-gray-200 border border-gray-200 rounded-lg overflow-hidden">
             {recipe.ingredients.map((ingredient, index) => (
               <li key={index} className="flex justify-between px-4 py-2 bg-white">
@@ -67,7 +68,7 @@ export default async function RecipeDetailPage({
 
       {recipe.steps?.length > 0 && (
         <section>
-          <h2 className="text-lg font-semibold mt-6 mb-2">步骤</h2>
+          <h2 className="text-lg font-semibold mt-6 mb-2 flex items-center gap-1.5"><ListOrdered className="h-4 w-4 text-orange-500" />步骤</h2>
           <ol className="space-y-4">
             {recipe.steps.map((step) => (
               <li key={step.order} className="flex gap-3">

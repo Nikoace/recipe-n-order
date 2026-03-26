@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog"
 import type { Tag } from "@/db/schema"
+import { Plus, Pencil, Trash2, Check, X } from "lucide-react"
 
 const PRESET_COLORS = ["#ef4444", "#f97316", "#eab308", "#22c55e", "#3b82f6", "#8b5cf6", "#ec4899"]
 
@@ -104,7 +105,7 @@ export default function TagsPage() {
           ))}
         </div>
         <Button type="submit" disabled={creating || !newName.trim()}>
-          {creating ? "添加中..." : "添加"}
+          {creating ? "添加中..." : <><Plus className="h-4 w-4 mr-1" />添加</>}
         </Button>
       </form>
 
@@ -129,8 +130,8 @@ export default function TagsPage() {
                   />
                 ))}
               </div>
-              <Button size="sm" onClick={() => handleSaveEdit(tag.id)} disabled={!editName.trim()}>保存</Button>
-              <Button size="sm" variant="outline" onClick={() => setEditingId(null)}>取消</Button>
+              <Button size="sm" onClick={() => handleSaveEdit(tag.id)} disabled={!editName.trim()}><Check className="h-3.5 w-3.5 mr-1" />保存</Button>
+              <Button size="sm" variant="outline" onClick={() => setEditingId(null)}><X className="h-3.5 w-3.5 mr-1" />取消</Button>
             </div>
           ) : (
             <div key={tag.id} className="flex items-center justify-between border rounded-lg p-3">
@@ -139,9 +140,9 @@ export default function TagsPage() {
                 <span className="font-medium">{tag.name}</span>
               </div>
               <div className="flex gap-2">
-                <Button size="sm" variant="outline" onClick={() => startEdit(tag)}>编辑</Button>
+                <Button size="sm" variant="outline" onClick={() => startEdit(tag)}><Pencil className="h-3.5 w-3.5 mr-1" />编辑</Button>
                 <ConfirmDialog
-                  trigger={<Button type="button" size="sm" variant="outline">删除</Button>}
+                  trigger={<Button type="button" size="sm" variant="outline"><Trash2 className="h-3.5 w-3.5 mr-1" />删除</Button>}
                   title="删除标签"
                   description={`确认删除标签「${tag.name}」？已使用该标签的菜谱不受影响。`}
                   confirmLabel="删除"
