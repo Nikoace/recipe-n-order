@@ -1,7 +1,29 @@
 import { db } from "@/db"
 import { recipes, tags, recipeTags, eventRecipes, orders } from "@/db/schema"
 import { eq, inArray } from "drizzle-orm"
-import type { Order } from "@/db/schema"
+import type { Order, Tag } from "@/db/schema"
+
+export type RecipeWithTags = typeof recipes.$inferSelect & { tags: Tag[] }
+
+export async function getRecipesWithTags(search?: string, tagIds?: number[]): Promise<RecipeWithTags[]> {
+  const recipeList = await getRecipes(search, tagIds)
+  if (!recipeList.length) return []
+
+  const ids = recipeList.map((r) => r.id)
+  const tagRows = await db
+    .select({ recipeId: recipeTags.recipeId, tag: tags })
+    .from(recipeTags)
+    .innerJoin(tags, eq(recipeTags.tagId, tags.id))
+    .where(inArray(recipeTags.recipeId, ids))
+
+  const tagMap = new Map<number, Tag[]>()
+  for (const row of tagRows) {
+    if (!tagMap.has(row.recipeId)) tagMap.set(row.recipeId, [])
+    tagMap.get(row.recipeId)!.push(row.tag)
+  }
+
+  return recipeList.map((r) => ({ ...r, tags: tagMap.get(r.id) ?? [] }))
+}
 
 export async function getRecipes(search?: string, tagIds?: number[]) {
   const all = await db.query.recipes.findMany({

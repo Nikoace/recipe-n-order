@@ -1,57 +1,49 @@
-import { getRecipes } from "@/db/queries/recipes"
-import { difficultyLabel } from "@/lib/utils"
-import { Badge } from "@/components/ui/badge"
-import { UtensilsCrossed, Gauge, Clock } from "lucide-react"
+import { Suspense } from "react"
+import { db } from "@/db"
+import { tags } from "@/db/schema"
+import { getRecipesWithTags } from "@/db/queries/recipes"
+import { RecipeCard } from "@/components/recipe/RecipeCard"
+import { RecipeSearchFilter } from "@/components/recipe/RecipeSearchFilter"
 
-export default async function Home() {
-  const recipes = await getRecipes()
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ search?: string; tags?: string }>
+}) {
+  const { search, tags: tagsParam } = await searchParams
+  const tagIds = tagsParam?.split(",").map(Number).filter(Boolean)
+
+  const [recipes, allTags] = await Promise.all([
+    getRecipesWithTags(search, tagIds),
+    db.select().from(tags).orderBy(tags.name),
+  ])
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       {/* Hero section */}
-      <div className="mb-12 text-center">
+      <div className="mb-8 text-center">
         <h1 className="text-3xl font-bold text-orange-500">Recipe &amp; Order</h1>
         <p className="mt-2 text-gray-600">记录家常菜谱，轻松组织聚餐点菜</p>
       </div>
 
-      {/* Recipe showcase grid */}
+      {/* Search & filter */}
+      <Suspense>
+        <RecipeSearchFilter tags={allTags} className="mb-6" />
+      </Suspense>
+
+      {/* Recipe grid */}
       {recipes.length === 0 ? (
-        <div className="text-center text-gray-400">暂无菜谱</div>
+        <div className="text-center text-gray-400 py-16">
+          {search || tagIds?.length ? "没有找到符合条件的菜谱" : "暂无菜谱"}
+        </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {recipes.map((recipe) => (
-            <div
+            <RecipeCard
               key={recipe.id}
-              className="border rounded-lg overflow-hidden shadow-sm"
-            >
-              {recipe.coverImage ? (
-                <img
-                  src={recipe.coverImage}
-                  alt={recipe.title}
-                  className="w-full h-48 object-cover"
-                />
-              ) : (
-                <div className="w-full h-48 bg-orange-50 flex items-center justify-center">
-                  <UtensilsCrossed className="h-12 w-12 text-orange-300" />
-                </div>
-              )}
-              <div className="p-4">
-                <h2 className="font-semibold text-lg">{recipe.title}</h2>
-                <div className="flex gap-2 mt-1 flex-wrap">
-                  <Badge variant="secondary" className="flex items-center gap-1">
-                    <Gauge className="h-3 w-3" />{difficultyLabel(recipe.difficulty)}
-                  </Badge>
-                  {recipe.cookTime != null && (
-                    <Badge variant="outline" className="flex items-center gap-1"><Clock className="h-3 w-3" />{recipe.cookTime} 分钟</Badge>
-                  )}
-                </div>
-                {recipe.description && (
-                  <p className="mt-2 text-sm text-gray-500 line-clamp-2">
-                    {recipe.description}
-                  </p>
-                )}
-              </div>
-            </div>
+              recipe={recipe}
+              href={`/recipe/${recipe.id}`}
+            />
           ))}
         </div>
       )}

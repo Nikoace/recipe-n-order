@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import {
   getRecipeById,
+  getRecipeTags,
   updateRecipe,
   deleteRecipe,
   setRecipeTags,
@@ -10,9 +11,13 @@ import { requireAdmin } from "@/lib/admin-auth"
 
 export async function GET(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const recipe = await getRecipeById(Number(id))
+  const numId = Number(id)
+  const [recipe, tagRows] = await Promise.all([
+    getRecipeById(numId),
+    getRecipeTags(numId),
+  ])
   if (!recipe) return NextResponse.json({ error: "未找到" }, { status: 404 })
-  return NextResponse.json(recipe)
+  return NextResponse.json({ ...recipe, tags: tagRows.map((r) => r.tag) })
 }
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
