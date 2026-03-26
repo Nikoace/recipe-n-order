@@ -21,7 +21,7 @@ export function EventStatusButton({ eventId, currentStatus }: Props) {
   async function handleClick() {
     setLoading(true)
     try {
-      await fetch(`/api/events/${eventId}`, {
+      await fetch(`/api/events/admin/${eventId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: nextStatus }),

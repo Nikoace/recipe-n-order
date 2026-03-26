@@ -15,7 +15,7 @@ export function SummaryPanel({ eventId }: { eventId: number }) {
   const [data, setData] = useState<SummaryData | null>(null)
 
   const fetchSummary = useCallback(async () => {
-    const res = await fetch(`/api/events/${eventId}/summary`)
+    const res = await fetch(`/api/events/admin/${eventId}/summary`)
     if (res.ok) setData(await res.json())
   }, [eventId])
 

@@ -53,7 +53,7 @@ export function EventForm({
         recipeIds: selectedRecipes,
       }
       const res = await fetch(
-        mode === "create" ? "/api/events" : `/api/events/${eventId}`,
+        mode === "create" ? "/api/events" : `/api/events/admin/${eventId}`,
         {
           method: mode === "create" ? "POST" : "PUT",
           headers: { "Content-Type": "application/json" },

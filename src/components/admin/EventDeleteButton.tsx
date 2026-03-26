@@ -10,7 +10,7 @@ export function EventDeleteButton({ id, title }: { id: number; title: string }) 
   const router = useRouter()
 
   async function handleDelete() {
-    const res = await fetch(`/api/events/${id}`, { method: "DELETE" })
+    const res = await fetch(`/api/events/admin/${id}`, { method: "DELETE" })
     if (res.ok) {
       toast.success("活动已删除")
       router.push("/admin/events")

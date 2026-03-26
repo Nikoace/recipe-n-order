@@ -39,4 +39,4 @@ async function seed() {
   process.exit(0)
 }
 
-seed().catch(console.error)
+await seed().catch(console.error)

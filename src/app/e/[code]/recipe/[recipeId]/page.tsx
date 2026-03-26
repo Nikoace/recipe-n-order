@@ -5,12 +5,12 @@ import { RecipeDetail } from "@/components/recipe/RecipeDetail"
 export default async function RecipeDetailPage({
   params,
 }: {
-  params: Promise<{ code: string; id: string }>
+  params: Promise<{ code: string; recipeId: string }>
 }) {
-  const { code, id } = await params
+  const { code, recipeId } = await params
   const [recipe, tagRows] = await Promise.all([
-    getRecipeById(Number(id)),
-    getRecipeTags(Number(id)),
+    getRecipeById(Number(recipeId)),
+    getRecipeTags(Number(recipeId)),
   ])
 
   if (!recipe) {
