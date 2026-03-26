@@ -23,8 +23,7 @@ export function RecipeDetail({ recipe, tags, backLink }: RecipeDetailProps) {
         <img
           src={recipe.coverImage}
           alt={recipe.title}
-          className="w-full object-cover rounded-lg"
-          style={{ maxHeight: "240px" }}
+          className="w-full h-60 object-cover rounded-lg"
         />
       )}
 
